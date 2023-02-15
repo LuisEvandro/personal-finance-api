@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { HttpException } from '@nestjs/common/exceptions';
 import { PrismaService } from 'src/database/prisma.service';
 import { CategoryDTO } from './category.dto';
 
@@ -14,7 +15,7 @@ export class CategoryService {
     });
 
     if (categoryExists) {
-      throw new Error('Category already exists');
+      throw new HttpException('Category already exists', 409);
     }
 
     category.status = true;
@@ -36,7 +37,7 @@ export class CategoryService {
     });
 
     if (!categoryExists) {
-      throw new Error('Category does not exists');
+      throw new HttpException('Category does not exists', 400);
     }
 
     const updatedCategory = await this.prisma.category.update({
@@ -59,7 +60,7 @@ export class CategoryService {
     });
 
     if (!categoryExists) {
-      throw new Error('Category does not exists!');
+      throw new HttpException('Category does not exists', 400);
     }
 
     return await this.prisma.category.delete({
