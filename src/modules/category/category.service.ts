@@ -70,10 +70,29 @@ export class CategoryService {
     });
   }
 
-  async getAllPaginated(page: number, size: number) {
+  // TODO: Melhorar getCategoriesPaginated e getAll
+  async getCategoriesPaginated(
+    page: number,
+    size: number,
+    filters?: { name?: string | undefined; status?: boolean | undefined },
+  ) {
     return await this.prisma.category.findMany({
-      skip: page * size,
+      skip: page === 1 ? 0 : page * size,
       take: size,
+      where: {
+        name: {
+          contains: filters?.name,
+        },
+        status: filters?.status,
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    });
+  }
+
+  async getAll() {
+    return await this.prisma.category.findMany({
       orderBy: {
         name: 'asc',
       },
