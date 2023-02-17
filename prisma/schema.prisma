@@ -16,6 +16,8 @@ model Category {
   color        String        @unique
   description  String?
   status       Boolean
+  created_at   DateTime      @default(now())
+  updated_at   DateTime?
   transactions Transaction[]
 
   @@map("categories")
@@ -26,6 +28,8 @@ model Installment {
   quantity     Int
   startPay     DateTime
   finalPay     DateTime
+  created_at   DateTime      @default(now())
+  updated_at   DateTime?
   transactions Transaction[]
 
   @@map("installments")
@@ -42,6 +46,8 @@ model Transaction {
   payment_method String? // ( "credit" or "debit" or "cash" or "others" ) Enum not suported SQLite
   Installment    Installment? @relation(fields: [installmentId], references: [id])
   installmentId  String?
+  created_at     DateTime     @default(now())
+  updated_at     DateTime?
 
   @@map("transactions")
 }
